@@ -1,0 +1,91 @@
+# 📌 Meta Prompt: Calendar-Aware Pomodoro (Replit + Google Calendar)
+
+## 🎯 Outcome
+Build a full-stack MVP in **one Repl**:
+- Frontend: **Vite + React + Tailwind**
+- Backend: **Node.js + Express**
+- Google Calendar **OAuth 2.0** using official `googleapis`
+- Read upcoming events and create “Focus — {task}” events
+- Pomodoro with **Smart Adjust** (shorten to finish ≥3 min before next meeting)
+- Ship a clear **README** with setup + troubleshooting
+
+## 🔧 Hard Requirements (never change)
+- Libraries: `googleapis`, `dotenv`, `axios` (or fetch), `cookie-session` or `express-session`
+- Backend routes:
+  - `GET /auth` (start OAuth)
+  - `GET /oauth2callback` (handle code exchange; PKCE or standard)
+  - `POST /logout`
+  - `GET /next-events?window=<minutes>` (default 180; serve from cache)
+  - `POST /focus-block` (create event “Focus — {task}”, start=now, duration from body)
+- Secrets (env or Replit Secrets): `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI=https://<your-repl>.replit.app/oauth2callback`
+- Scopes: `calendar.readonly`, `calendar.events`
+- Token handling: store server-side (memory + local JSON fallback). **Never expose secrets** on client.
+- Quality: clean modular code, brief comments, accessible UI, ESLint-friendly
+
+## 🛡️ Guardrails
+- Do **not** switch stack/libraries unless explicitly asked
+- Do **not** hardcode credentials; always use env vars
+- Keep OAuth redirect path `/oauth2callback`
+- Non-blocking calls; cache upcoming events (refresh every 60s)
+
+## 🎨 UI Design Rules (visual ref + Alegra palette)
+- Use a provided screenshot as **layout reference** (left: Daily Progress + Task List; right: circular timer with tabs; controls below). **Adapt** to Tailwind, don’t copy pixel-by-pixel.
+- Apply Alegra-like tokens (replace hexes if needed):
+  - `--color-primary:#00B894;` `--color-primary-600:#00A083;`
+  - `--color-accent:#3B82F6;` `--color-bg:#F8FAFC;` `--color-card:#FFFFFF;`
+  - `--color-text:#0F172A;` `--color-muted:#94A3B8;`
+- Tailwind theme mapping: `primary`(buttons/active/tab/progress/timer), `accent`(rings/badges/secondary), `bg/card`, `text/muted`
+- Components to mirror (adapted): Progress bar, compact Task List with “Pomos x/y”, **SVG circular countdown**, tabs (Pomodoro/Short/Long), Reset/Pause/Resume, quick chips for durations
+- Responsive: ≥1024px two columns; <1024px stacked with timer first
+- Reserve space for future **Stats** and **Settings**
+
+> If you have a screenshot, place it at `/client/public/reference.png` and align the UI to it with Alegra colors.
+
+## 📂 Project Structure (enforce)
+/server
+index.js
+google.js # OAuth client + helpers
+calendar.js # listUpcomingEvents, createFocusEvent, cache
+tokens.json # runtime; gitignored
+/client
+index.html
+src/
+main.tsx
+App.tsx
+components/
+Pomodoro.tsx
+NextMeeting.tsx
+Controls.tsx
+Progress.tsx
+TaskList.tsx
+lib/
+api.ts
+time.ts
+public/
+reference.png # optional: your uploaded design image
+tailwind.css
+tailwind.config.js # extends Tailwind with the color tokens
+.env.example
+README.md
+
+## ⚙️ Implementation Notes
+- Backend: `google.auth.OAuth2`; helpers `getCalendarClient(tokens)`, `listUpcomingEvents({windowMins})`, `createFocusEvent({title,minutes})`; cache refresh every 60s
+- Frontend: state machine `idle→running→paused→finished`; Notification permission on first Start; Smart Adjust suggests “Adjust to X min” when needed; SVG timer uses `primary`
+
+## 📖 README Must Include
+1) Enable **Google Calendar API**, create **OAuth Web Client**, add redirect URI  
+2) Set `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI`  
+3) Commands to run/build  
+4) Test flow (Auth → Pomodoro → Focus Block → confirm in Calendar)  
+5) Troubleshooting (redirect mismatch, consent screen, invalid scope, clock skew)
+
+## ✅ Acceptance Criteria
+- `/auth` completes OAuth and persists tokens
+- `/next-events` returns upcoming events (default 180) from cache
+- `POST /focus-block` creates a Calendar event visible in Google Calendar
+- Pomodoro runs reliably; notifications fire; **Smart Adjust** works
+- UI follows reference layout and **Alegra tokens**
+- A new user can set up end-to-end in **< 15 minutes**
+
+## ▶️ Execute Now (first run)
+Create the full project described in this meta prompt and stop after delivering: working OAuth, `/next-events`, `/focus-block`, the Pomodoro UI with Smart Adjust and Notifications, Tailwind theme using Alegra tokens, and a complete README. If `/public/reference.png` exists, adapt the UI to that reference.

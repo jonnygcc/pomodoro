@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Alegra color tokens as specified in the meta prompt */
+  --color-primary: hsl(158, 64%, 36%);
+  --color-primary-600: hsl(158, 64%, 32%);
+  --color-accent: hsl(217, 91%, 60%);
+  --color-bg: hsl(210, 40%, 98%);
+  --color-card: hsl(0, 0%, 100%);
+  --color-text: hsl(222, 84%, 5%);
+  --color-muted: hsl(215, 13%, 58%);
+
+  /* CSS custom properties for Tailwind */
+  --background: var(--color-bg);
+  --foreground: var(--color-text);
+  --card: var(--color-card);
+  --card-foreground: var(--color-text);
+  --popover: var(--color-card);
+  --popover-foreground: var(--color-text);
+  --primary: var(--color-primary);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(210, 40%, 96%);
+  --secondary-foreground: hsl(222, 5%, 11%);
+  --muted: hsl(210, 40%, 96%);
+  --muted-foreground: var(--color-muted);
+  --accent: var(--color-accent);
+  --accent-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --ring: var(--color-accent);
+  --chart-1: var(--color-accent);
+  --chart-2: var(--color-primary);
+  --chart-3: hsl(42, 93%, 56%);
+  --chart-4: hsl(147, 79%, 42%);
+  --chart-5: hsl(341, 75%, 51%);
+  --sidebar: var(--color-card);
+  --sidebar-foreground: var(--color-text);
+  --sidebar-primary: var(--color-primary);
+  --sidebar-primary-foreground: hsl(0, 0%, 100%);
+  --sidebar-accent: hsl(217, 51%, 93%);
+  --sidebar-accent-foreground: var(--color-accent);
+  --sidebar-border: hsl(214, 32%, 91%);
+  --sidebar-ring: var(--color-accent);
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 8px;
+}
+
+.dark {
+  --background: hsl(222, 84%, 5%);
+  --foreground: hsl(210, 40%, 98%);
+  --card: hsl(222, 10%, 10%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --popover: hsl(222, 10%, 10%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --primary: var(--color-primary);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(222, 10%, 15%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --muted: hsl(222, 10%, 15%);
+  --muted-foreground: hsl(215, 13%, 65%);
+  --accent: var(--color-accent);
+  --accent-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(222, 10%, 20%);
+  --input: hsl(222, 10%, 20%);
+  --ring: var(--color-accent);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+/* Timer circle animation */
+.timer-circle {
+  transform: rotate(-90deg);
+  transition: stroke-dasharray 1s ease;
+}
+
+/* Notification animations */
+@keyframes pulse-notification {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.pulse-animate {
+  animation: pulse-notification 2s ease-in-out infinite;
+}
+
+/* Custom styles for better visual hierarchy */
+.task-item {
+  @apply flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors;
+}
+
+.task-item.completed {
+  @apply opacity-70;
+}
+
+.task-item.active {
+  background-color: hsl(var(--accent) / 0.1);
+  border: 1px solid hsl(var(--accent) / 0.2);
+}
+
+.progress-circle {
+  @apply transition-all duration-500 ease-out;
+}
